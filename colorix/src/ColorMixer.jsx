@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { gsap } from "gsap";
 
+// Convert hex → RGB
 const hexToRgb = (hex) => {
   const h = hex.replace("#", "");
   const bigint = parseInt(
@@ -12,9 +13,14 @@ const hexToRgb = (hex) => {
       : h,
     16
   );
-  return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255,
+  };
 };
 
+// Convert RGB → hex
 const rgbToHex = (r, g, b) =>
   "#" +
   [r, g, b]
@@ -24,14 +30,48 @@ const rgbToHex = (r, g, b) =>
     })
     .join("");
 
+// Fetch color name from API
+async function fetchColorName(hex) {
+  try {
+    const res = await fetch(
+      `https://www.thecolorapi.com/id?hex=${hex.replace("#", "")}`
+    );
+    const data = await res.json();
+    return data?.name?.value ?? "Unknown";
+  } catch {
+    return "Unknown";
+  }
+}
+
 export default function ColorMixer({ setColorData, palette, setPalette }) {
   const [mode, setMode] = useState(2);
   const [color1, setColor1] = useState("#ff6b6b");
   const [color2, setColor2] = useState("#4dabf7");
   const [color3, setColor3] = useState("#ffd166");
+
+  const [color1Name, setColor1Name] = useState("");
+  const [color2Name, setColor2Name] = useState("");
+  const [color3Name, setColor3Name] = useState("");
+
   const [mixedColor, setMixedColor] = useState(null);
   const [suggestedName, setSuggestedName] = useState(null);
 
+  // Update color names whenever user picks a new color
+  useEffect(() => {
+    fetchColorName(color1).then(setColor1Name);
+  }, [color1]);
+
+  useEffect(() => {
+    fetchColorName(color2).then(setColor2Name);
+  }, [color2]);
+
+  useEffect(() => {
+    if (mode === 3) {
+      fetchColorName(color3).then(setColor3Name);
+    }
+  }, [color3, mode]);
+
+  // Mix function
   const mixAndFetch = async () => {
     const rgbs = [hexToRgb(color1), hexToRgb(color2)];
     if (mode === 3) rgbs.push(hexToRgb(color3));
@@ -99,33 +139,59 @@ export default function ColorMixer({ setColorData, palette, setPalette }) {
         </label>
       </div>
 
+      {/* Color Pickers */}
       <div
         className="inputs"
-        style={{ display: "flex", gap: 12, marginTop: 10 }}
+        style={{ display: "flex", gap: 24, marginTop: 16 }}
       >
-        <input
-          type="color"
-          value={color1}
-          onChange={(e) => setColor1(e.target.value)}
-        />
-        <input
-          type="color"
-          value={color2}
-          onChange={(e) => setColor2(e.target.value)}
-        />
-        {mode === 3 && (
+        {/* Color 1 */}
+        <div style={{ textAlign: "center" }}>
           <input
             type="color"
-            value={color3}
-            onChange={(e) => setColor3(e.target.value)}
+            value={color1}
+            onChange={(e) => setColor1(e.target.value)}
           />
+          <div style={{ marginTop: 6, fontSize: 12 }}>
+            <div>{color1.toUpperCase()}</div>
+            <div style={{ color: "#666" }}>{color1Name}</div>
+          </div>
+        </div>
+
+        {/* Color 2 */}
+        <div style={{ textAlign: "center" }}>
+          <input
+            type="color"
+            value={color2}
+            onChange={(e) => setColor2(e.target.value)}
+          />
+          <div style={{ marginTop: 6, fontSize: 12 }}>
+            <div>{color2.toUpperCase()}</div>
+            <div style={{ color: "#666" }}>{color2Name}</div>
+          </div>
+        </div>
+
+        {/* Color 3 (if enabled) */}
+        {mode === 3 && (
+          <div style={{ textAlign: "center" }}>
+            <input
+              type="color"
+              value={color3}
+              onChange={(e) => setColor3(e.target.value)}
+            />
+            <div style={{ marginTop: 6, fontSize: 12 }}>
+              <div>{color3.toUpperCase()}</div>
+              <div style={{ color: "#666" }}>{color3Name}</div>
+            </div>
+          </div>
         )}
       </div>
 
+      {/* Mix button */}
       <div style={{ marginTop: 12 }}>
         <button onClick={mixAndFetch}>Mix Colors</button>
       </div>
 
+      {/* Mixed Color Preview */}
       {mixedColor && (
         <div className="mixed-result" style={{ marginTop: 12 }}>
           <div

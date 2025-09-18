@@ -51,7 +51,7 @@ export default function App() {
       </div>
 
       <div className="app-container">
-        <h1 className="title">🎨 Colorix</h1>
+        <h1 className="title">🎨 Mixaroo</h1>
         <p className="lead">
           Search, pick, mix 2–3 colors — save your favorites to the palette.
         </p>
