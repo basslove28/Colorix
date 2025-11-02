@@ -7,7 +7,7 @@ export default function WelcomePage({ onComplete }) {
   const logoRef = useRef(null);
 
   useEffect(() => {
-    const text = "Welcome to Mixaroo";
+    const text = "Mixaroo";
     const letters = text.split("");
 
     // Clear existing content
