@@ -154,6 +154,39 @@ body,
   text-align: center;
 }
 
+/* welcome page */
+.welcome-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 40%, #fbc2eb 100%);
+  padding: 24px;
+}
+
+.welcome-content {
+  text-align: center;
+  z-index: 2;
+}
+
+.welcome-logo {
+  font-size: 120px;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.welcome-text {
+  font-size: 48px;
+  color: #3a3d98;
+  font-weight: bold;
+  margin: 0;
+  letter-spacing: 2px;
+}
+
+.welcome-text span {
+  display: inline-block;
+}
+
 /* small screens */
 @media (max-width: 600px) {
   .search-row input[type="text"] {
@@ -161,5 +194,11 @@ body,
   }
   .app-container {
     padding: 16px;
+  }
+  .welcome-logo {
+    font-size: 80px;
+  }
+  .welcome-text {
+    font-size: 32px;
   }
 }

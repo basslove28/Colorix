@@ -1,7 +1,7 @@
 import React from "react";
 import { gsap } from "gsap";
 
-export default function ColorPalette({ palette, setColorData }) {
+export default function ColorPalette({ palette, setColorData, setPalette }) {
   if (!palette.length) return null;
 
   // Handle click on a saved color
@@ -19,6 +19,11 @@ export default function ColorPalette({ palette, setColorData }) {
       duration: 1,
       ease: "power2.out",
     });
+  };
+
+  // Handle remove palette item
+  const handleRemove = (index) => {
+    setPalette(palette.filter((_, i) => i !== index));
   };
 
   return (
@@ -81,6 +86,65 @@ export default function ColorPalette({ palette, setColorData }) {
                 {c.name}
               </div>
             )}
+            {/* Component colors */}
+            {c.components && (
+              <div
+                style={{
+                  display: "flex",
+                  gap: 4,
+                  justifyContent: "center",
+                  marginTop: 4,
+                }}
+              >
+                {c.components.map((comp, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: "50%",
+                      background: comp,
+                      border: "1px solid #333",
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+            {/* Description of mixed colors */}
+            {c.componentNames && (
+              <div
+                style={{
+                  fontSize: 8,
+                  color: "#666",
+                  textAlign: "center",
+                  marginTop: 2,
+                }}
+              >
+                Mixed from:{" "}
+                {c.componentNames
+                  .map((name, idx) => `${name} (${c.components[idx]})`)
+                  .join(", ")}
+              </div>
+            )}
+            {/* Remove button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRemove(i);
+              }}
+              style={{
+                fontSize: 10,
+                marginTop: 4,
+                padding: "2px 6px",
+                background: "#f00",
+                color: "#fff",
+                border: "none",
+                borderRadius: 4,
+                cursor: "pointer",
+              }}
+            >
+              Remove
+            </button>
           </div>
         ))}
       </div>

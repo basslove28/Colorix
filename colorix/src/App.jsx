@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { gsap } from "gsap";
+import WelcomePage from "./WelcomePage.jsx";
 import SearchBar from "./SearchBar.jsx";
 import ColorWheel from "./ColorWheel.jsx";
 import ColorResults from "./ColorResults.jsx";
@@ -8,8 +9,13 @@ import ColorPalette from "./ColorPalette.jsx"; // ✅ new component
 import "./styles.css";
 
 export default function App() {
+  const [showWelcome, setShowWelcome] = useState(true);
   const [colorData, setColorData] = useState(null);
   const [palette, setPalette] = useState([]); // ✅ store saved colors
+
+  const handleWelcomeComplete = () => {
+    setShowWelcome(false);
+  };
 
   useEffect(() => {
     const bubbles = gsap.utils.toArray(".bubble");
@@ -42,6 +48,10 @@ export default function App() {
     });
   }, [colorData]);
 
+  if (showWelcome) {
+    return <WelcomePage onComplete={handleWelcomeComplete} />;
+  }
+
   return (
     <div className="app-wrapper">
       <div className="bubbles" aria-hidden>
@@ -64,7 +74,7 @@ export default function App() {
         />{" "}
         {/* ✅ */}
         {colorData && <ColorResults colorData={colorData} />}
-        <ColorPalette palette={palette} /> {/* ✅ */}
+        <ColorPalette palette={palette} setPalette={setPalette} /> {/* ✅ */}
       </div>
     </div>
   );

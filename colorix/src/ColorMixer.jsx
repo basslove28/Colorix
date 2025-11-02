@@ -112,7 +112,17 @@ export default function ColorMixer({ setColorData, palette, setPalette }) {
 
   const addToPalette = () => {
     if (!mixedColor) return;
-    const entry = { hex: mixedColor, name: suggestedName || "Custom Color" };
+    const components = mode === 2 ? [color1, color2] : [color1, color2, color3];
+    const componentNames =
+      mode === 2
+        ? [color1Name, color2Name]
+        : [color1Name, color2Name, color3Name];
+    const entry = {
+      hex: mixedColor,
+      name: suggestedName || "Custom Color",
+      components,
+      componentNames,
+    };
     setPalette([...palette, entry]);
   };
 
