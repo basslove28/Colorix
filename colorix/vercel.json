@@ -1,6 +1,5 @@
 {
-  "rootDirectory": "colorix",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
+  "buildCommand": "cd colorix && npm run build",
+  "outputDirectory": "colorix/dist",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
