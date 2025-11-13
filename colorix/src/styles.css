@@ -27,14 +27,13 @@ body,
 
 /* bubbles */
 .bubbles {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
 }
 .bubble {
   position: absolute;
-  bottom: -120px;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -42,27 +41,22 @@ body,
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
 }
 .bubble:nth-child(2) {
-  left: 12%;
   width: 32px;
   height: 32px;
 }
 .bubble:nth-child(3) {
-  left: 28%;
   width: 56px;
   height: 56px;
 }
 .bubble:nth-child(4) {
-  left: 46%;
   width: 42px;
   height: 42px;
 }
 .bubble:nth-child(5) {
-  left: 68%;
   width: 28px;
   height: 28px;
 }
 .bubble:nth-child(6) {
-  left: 84%;
   width: 64px;
   height: 64px;
 }

@@ -18,17 +18,6 @@ export default function App() {
   };
 
   useEffect(() => {
-    const bubbles = gsap.utils.toArray(".bubble");
-    bubbles.forEach((b) => {
-      gsap.to(b, {
-        y: -window.innerHeight - 200,
-        duration: 8 + Math.random() * 8,
-        repeat: -1,
-        delay: Math.random() * 6,
-        ease: "sine.inOut",
-      });
-    });
-
     gsap.from(".app-container", {
       y: 30,
       opacity: 0,
@@ -36,6 +25,38 @@ export default function App() {
       ease: "power3.out",
     });
   }, []);
+
+  useEffect(() => {
+    if (!showWelcome) {
+      // Small delay to ensure bubbles are rendered
+      setTimeout(() => {
+        const bubbles = gsap.utils.toArray(".bubble");
+        if (bubbles.length > 0) {
+          bubbles.forEach((b) => {
+            // Set initial random position
+            gsap.set(b, {
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight,
+            });
+
+            // Function to animate to new random position
+            const animateBubble = (bubble) => {
+              gsap.to(bubble, {
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                duration: 4 + Math.random() * 4,
+                ease: "sine.inOut",
+                onComplete: () => animateBubble(bubble),
+              });
+            };
+
+            // Start animation
+            animateBubble(b);
+          });
+        }
+      }, 100);
+    }
+  }, [showWelcome]);
 
   useEffect(() => {
     if (!colorData?.hex?.value) return;
@@ -53,29 +74,30 @@ export default function App() {
   }
 
   return (
-    <div className="app-wrapper">
+    <>
       <div className="bubbles" aria-hidden>
         {Array.from({ length: 10 }).map((_, idx) => (
           <div key={idx} className="bubble" />
         ))}
       </div>
-
-      <div className="app-container">
-        <h1 className="title">🎨 Mixaroo</h1>
-        <p className="lead">
-          Search, pick, mix 2–3 colors — save your favorites to the palette.
-        </p>
-        <SearchBar setColorData={setColorData} />
-        <ColorWheel setColorData={setColorData} />
-        <ColorMixer
-          setColorData={setColorData}
-          palette={palette}
-          setPalette={setPalette}
-        />{" "}
-        {/* ✅ */}
-        {colorData && <ColorResults colorData={colorData} />}
-        <ColorPalette palette={palette} setPalette={setPalette} /> {/* ✅ */}
+      <div className="app-wrapper">
+        <div className="app-container">
+          <h1 className="title">🎨 Mixaroo</h1>
+          <p className="lead">
+            Search, pick, mix 2–3 colors — save your favorites to the palette.
+          </p>
+          <SearchBar setColorData={setColorData} />
+          <ColorWheel setColorData={setColorData} />
+          <ColorMixer
+            setColorData={setColorData}
+            palette={palette}
+            setPalette={setPalette}
+          />{" "}
+          {/* ✅ */}
+          {colorData && <ColorResults colorData={colorData} />}
+          <ColorPalette palette={palette} setPalette={setPalette} /> {/* ✅ */}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

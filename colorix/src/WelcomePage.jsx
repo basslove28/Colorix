@@ -5,8 +5,33 @@ export default function WelcomePage({ onComplete }) {
   const containerRef = useRef(null);
   const textRef = useRef(null);
   const logoRef = useRef(null);
+  const audioRef = useRef(null);
 
   useEffect(() => {
+    // Bubble animation - random movement
+    const bubbles = gsap.utils.toArray(".bubble");
+    bubbles.forEach((b) => {
+      // Set initial random position
+      gsap.set(b, {
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+      });
+
+      // Function to animate to new random position
+      const animateBubble = (bubble) => {
+        gsap.to(bubble, {
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          duration: 4 + Math.random() * 4,
+          ease: "sine.inOut",
+          onComplete: () => animateBubble(bubble),
+        });
+      };
+
+      // Start animation
+      animateBubble(b);
+    });
+
     const text = "Mixaroo";
     const letters = text.split("");
 
@@ -25,6 +50,16 @@ export default function WelcomePage({ onComplete }) {
 
     // Animation timeline
     const tl = gsap.timeline();
+
+    // Play audio at the start
+    tl.call(() => {
+      const audio = audioRef.current;
+      if (audio) {
+        audio.play().catch((error) => {
+          console.log("Audio play failed:", error);
+        });
+      }
+    });
 
     // Logo animation
     tl.fromTo(
@@ -53,12 +88,34 @@ export default function WelcomePage({ onComplete }) {
 
   return (
     <div ref={containerRef} className="welcome-page">
+      <div className="bubbles" aria-hidden>
+        {Array.from({ length: 10 }).map((_, idx) => (
+          <div key={idx} className="bubble" />
+        ))}
+      </div>
       <div className="welcome-content">
-        <div ref={logoRef} className="welcome-logo">
+        <div
+          ref={logoRef}
+          className="welcome-logo"
+          onClick={() => {
+            const audio = audioRef.current;
+            if (audio) {
+              audio.play().catch((error) => {
+                console.log("Audio play failed:", error);
+              });
+            }
+          }}
+          style={{ cursor: "pointer" }}
+        >
           🎨
         </div>
         <h1 ref={textRef} className="welcome-text"></h1>
       </div>
+      <audio
+        ref={audioRef}
+        src="/679064__divingboard__happy-melody.m4a"
+        preload="auto"
+      />
     </div>
   );
 }
