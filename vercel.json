@@ -1,5 +1,4 @@
 {
-  "rootDirectory": "colorix",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [

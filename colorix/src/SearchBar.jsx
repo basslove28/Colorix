@@ -52,7 +52,7 @@ export default function SearchBar({ setColorData }) {
       gsap.fromTo(
         errorRef.current,
         { opacity: 0, y: -10 },
-        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
       );
     }
   }, [error]);
@@ -79,7 +79,7 @@ export default function SearchBar({ setColorData }) {
       if (!q.startsWith("#") && isNaN(parseInt(q.replace("#", ""), 16))) {
         // user entered name — try name endpoint
         const nameRes = await fetch(
-          `https://www.thecolorapi.com/id?name=${encodeURIComponent(q)}`
+          `https://www.thecolorapi.com/id?name=${encodeURIComponent(q)}`,
         );
         const nameData = await nameRes.json();
         if (
@@ -99,7 +99,7 @@ export default function SearchBar({ setColorData }) {
     if (!data) {
       try {
         const hexRes = await fetch(
-          `https://www.thecolorapi.com/id?hex=${maybeHex}`
+          `https://www.thecolorapi.com/id?hex=${maybeHex}`,
         );
         const hexData = await hexRes.json();
         if (hexData && hexData.hex && hexData.hex.value) {
@@ -123,7 +123,7 @@ export default function SearchBar({ setColorData }) {
   };
 
   return (
-    <div className="search-bar">
+    <div className="search-row">
       <input
         type="text"
         placeholder="Enter color name or hex (#3498db or blue)"

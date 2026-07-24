@@ -95,7 +95,12 @@ export default function App() {
           />{" "}
           {/* ✅ */}
           {colorData && <ColorResults colorData={colorData} />}
-          <ColorPalette palette={palette} setPalette={setPalette} /> {/* ✅ */}
+          <ColorPalette
+            palette={palette}
+            setColorData={setColorData}
+            setPalette={setPalette}
+          />{" "}
+          {/* ✅ */}
         </div>
       </div>
     </>
