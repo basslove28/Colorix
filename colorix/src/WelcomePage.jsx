@@ -32,7 +32,7 @@ export default function WelcomePage({ onComplete }) {
       animateBubble(b);
     });
 
-    const text = "Mixaroo";
+    const text = "Colorix";
     const letters = text.split("");
 
     // Clear existing content
